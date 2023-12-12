@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template, send_from_directory
 from flask_cors import CORS
 from sqlalchemy import create_engine
 import sqlite3
@@ -11,8 +11,28 @@ import getFromDB
 app = Flask(__name__)
 CORS(app)
 
-database_url = 'sqlite:///example.db'
-engine = create_engine(database_url)
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+# @app.route('/assets/index-dPeNwl7T.js')
+# def indexjs():
+#     return render_template('/assets/index-dPeNwl7T.js')
+
+# @app.route('/assets/index-RykgJ-UG.css')
+# def indexcss():
+#     return render_template('/assets/index-RykgJ-UG.css')
+
+@app.route('/assets/<path:filename>')
+def serve_static(filename):
+    if filename.endswith('.js'):
+        mimetype = 'application/javascript'
+    else:
+        mimetype = None
+    return send_from_directory("templates/assets/", filename, mimetype=mimetype)
+
+
+
 
 def parse_week_string(week_str):
     year, week = map(int, week_str.split(' W'))
@@ -43,63 +63,7 @@ def week_to_month(week_str):
     return month_format
 
 
-@app.route('/data')
-def index():
-    return jsonify(getCount())
 
-@app.route('/WeekDayCount')
-def weekdayCount():
-    data = getCountWeek()
-    return jsonify(data)
-
-
-@app.route('/getMonthlyRevenue')
-def getWeeklyRevenueFromMonth():
-    conn = sqlite3.connect("test.db")
-    cursor = conn.cursor()
-    data = getFromDB.getWeeklyRevenueFromMonth(cursor, "2023 M10")
-    conn.close()
-    return jsonify(data)
-
-@app.route("/getMonthlyMiles")
-def getMonthlyMiles():
-    conn = sqlite3.connect("test.db")
-    cursor = conn.cursor()
-    data = getFromDB.monthlyMilesReport(cursor, "2023 M10")
-    conn.close()
-    return jsonify(data)
-
-@app.route("/getDestinations")
-def getMonthlyDestinations():
-    conn = sqlite3.connect("test.db")
-    cursor = conn.cursor()
-    data = getFromDB.getDestinationCountsFromUtahByMonth(cursor, "2023 M10")
-    conn.close()
-    return jsonify(data)
-
-@app.route("/getYearlyRevenue")
-def getYearlyRevenueByMonth():
-    conn = sqlite3.connect("test.db")
-    cursor = conn.cursor()
-    data = getFromDB.getYearlyRevenueByMonth(cursor)
-    conn.close()
-    return jsonify(data)
-
-@app.route("/getMonthlyRevByUser")
-def getMonthlyRevByUser():
-    conn = sqlite3.connect("test.db")
-    cursor = conn.cursor()
-    data = getFromDB.getMonthlyRevenueByManager(cursor)
-    conn.close()
-    return jsonify(data)
-
-@app.route("/getRevByCode")
-def getRevByCode():
-    conn = sqlite3.connect("test.db")
-    cursor = conn.cursor()
-    data = getFromDB.getRevByCode(cursor)
-    conn.close()
-    return jsonify(data)
 
 @app.route('/getData/<start_date>/<end_date>', methods=['GET'])
 def get_data(start_date, end_date):
@@ -126,7 +90,6 @@ def get_Revenue(start_date, end_date):
     conn = sqlite3.connect('test.db')
     cursor = conn.cursor()
 
-    data = [{'Week': "2023 W10", "Revenue": 10}, {'Week': "2023 W11", "Revenue": 15}]
     dbData = getFromDB.getRevenueByDates(cursor, start_date, end_date)
     return jsonify(dbData)
 
@@ -141,6 +104,64 @@ def get_Revenue(start_date, end_date):
         end = week_to_month(end_date)
         result = getFromDB.milesReportByMonth(cursor, start, end)
         return jsonify(result)
+    
+    # @app.route('/data')
+# def index():
+#     return jsonify(getCount())
+
+# @app.route('/WeekDayCount')
+# def weekdayCount():
+#     data = getCountWeek()
+#     return jsonify(data)
+
+
+# @app.route('/getMonthlyRevenue')
+# def getWeeklyRevenueFromMonth():
+#     conn = sqlite3.connect("test.db")
+#     cursor = conn.cursor()
+#     data = getFromDB.getWeeklyRevenueFromMonth(cursor, "2023 M10")
+#     conn.close()
+#     return jsonify(data)
+
+# @app.route("/getMonthlyMiles")
+# def getMonthlyMiles():
+#     conn = sqlite3.connect("test.db")
+#     cursor = conn.cursor()
+#     data = getFromDB.monthlyMilesReport(cursor, "2023 M10")
+#     conn.close()
+#     return jsonify(data)
+
+# @app.route("/getDestinations")
+# def getMonthlyDestinations():
+#     conn = sqlite3.connect("test.db")
+#     cursor = conn.cursor()
+#     data = getFromDB.getDestinationCountsFromUtahByMonth(cursor, "2023 M10")
+#     conn.close()
+#     return jsonify(data)
+
+# @app.route("/getYearlyRevenue")
+# def getYearlyRevenueByMonth():
+#     conn = sqlite3.connect("test.db")
+#     cursor = conn.cursor()
+#     data = getFromDB.getYearlyRevenueByMonth(cursor)
+#     conn.close()
+#     return jsonify(data)
+
+# @app.route("/getMonthlyRevByUser")
+# def getMonthlyRevByUser():
+#     conn = sqlite3.connect("test.db")
+#     cursor = conn.cursor()
+#     data = getFromDB.getMonthlyRevenueByManager(cursor)
+#     conn.close()
+#     return jsonify(data)
+
+# @app.route("/getRevByCode")
+# def getRevByCode():
+#     conn = sqlite3.connect("test.db")
+#     cursor = conn.cursor()
+#     data = getFromDB.getRevByCode(cursor)
+#     conn.close()
+#     return jsonify(data)
     
 
 

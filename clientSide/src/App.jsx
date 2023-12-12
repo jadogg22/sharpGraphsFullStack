@@ -26,14 +26,14 @@ const App = () => {
               className="text-green-400 hover:text-green-200"
               to="/revenue"
             >
-              Revenue
+              Revenue Line
             </Link>
 
             <Link
               className="text-green-400 hover:text-green-200" 
               to="/stackedbar"
             >
-              Stacked Bar
+              Stacked Miles
             </Link>  
           </nav>
         </div>

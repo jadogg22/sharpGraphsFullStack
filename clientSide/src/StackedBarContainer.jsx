@@ -14,19 +14,25 @@ const StackedBarContainer = () => {
     setSelectedDateRange(dateRange);
   };
 
-  function getISOWeek(date) {
-    const jan4 = new Date(date.getFullYear(), 0, 4);
-    const daysSinceJan4 = (date - jan4) / 86400000; // 24 * 60 * 60 * 1000
-    return Math.ceil((daysSinceJan4 + jan4.getDay() + 1) / 7) - 1;
-    }
 
-  function convertTimestampToWeek(timestamp) {
-    const date = new Date(timestamp);
-    const isoWeek = getISOWeek(date);
-    const year = "2023"
-    const weeklyFormat = `${year} W${isoWeek}`;
-    return weeklyFormat;
-  }
+    function convertTimestampToWeek(timestamp) {
+      const date = new Date(timestamp);
+      date.setHours(0, 0, 0, 0);
+    
+      // Find Thursday of the current week
+      date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
+    
+      // Get the first day of the year
+      const yearStart = new Date(date.getFullYear(), 0, 1);
+    
+      // Calculate the week number
+      const isoWeek = Math.ceil(((date - yearStart) / 86400000 + 1) / 7);
+    
+      const year = date.getFullYear();
+      const weeklyFormat = `${year} W${isoWeek < 10 ? '0' : ''}${isoWeek}`;
+    
+      return weeklyFormat;
+    }
 
   useEffect(() => {
     const fetchDataAsync = async () => {
