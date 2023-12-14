@@ -28,7 +28,7 @@ const MonthlyRevByUser = () => {
   useEffect(() => {
     const fetchDataAsync = async () => {
       try {
-        const result = await fetchData('http://localhost:5000/getMonthlyRevByUser'); 
+        const result = await fetchData('/getMonthlyRevByUser'); 
         setData(result);
         
       } catch (error) {

@@ -46,7 +46,7 @@ const RevenueContainer = () => {
 
           console.log('Fetching data for:', start, 'to', end);
 
-          const result = await fetchData(`http://localhost:5000/getRevenue/${start}/${end}`);
+          const result = await fetchData(`/getRevenue/${start}/${end}`);
           console.log('API response:', result);
 
           setData(result);
