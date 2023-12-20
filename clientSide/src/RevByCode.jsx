@@ -45,7 +45,7 @@ const CustomTooltip = ({ active, payload, label }) => {
   useEffect(() => {
     const fetchDataAsync = async () => {
       try {
-        const result = await fetchData('http://localhost:5000/getRevByCode');
+        const result = await fetchData('http://192.168.0.228:5000/getRevByCode');
         // Sort data based on revenue in descending order
         const sortedData = result.sort((a, b) => b.revenue - a.revenue);
         // Filter out entries with zero revenue
