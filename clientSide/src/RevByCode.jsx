@@ -83,7 +83,7 @@ const CustomTooltip = ({ active, payload, label }) => {
    
       <ResponsiveContainer width="100%" height={600}>
       <div className="text-center pt-5">
-        <h1 className="text-3xl text-white mb-6">Weekly Revenue (in Thousands)</h1>
+        <h1 className="text-3xl text-white mb-6">Monthly Revenue (in Thousands)</h1>
       </div>
       <PieChart >
         <Pie

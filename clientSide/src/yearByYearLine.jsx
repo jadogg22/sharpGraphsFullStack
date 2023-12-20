@@ -66,7 +66,7 @@ const YearlyRevenue = () => {
   return (
     <ResponsiveContainer width="100%" height={400}>
       <div className="text-center">
-        <h1 className="text-3xl text-white mb-6">Monthly Revenue (in Thousands)</h1>
+        <h1 className="text-3xl text-white mb-6">Weekly Revenue (in Thousands)</h1>
       </div>
       <LineChart data={data} margin={{ top: 10, left: 20, right: 20, bottom: 10 }}>
         <CartesianGrid strokeDasharray="3" stroke="#ccc" />
