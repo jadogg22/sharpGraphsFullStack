@@ -10,7 +10,8 @@ def main():
         cursor = connection.cursor()
         #print(getFromDB.monthlyMilesReport(cursor, "2023 W10", "2023 W20"))
         #print(getFromDB.monthToSring("2023 M10"))
-        print(getFromDB.getRevenueByDates(cursor, "2022 W10", "2023 W14"))
+        #print(getFromDB.getRevenueByDates(cursor, "2022 W10", "2023 W14"))
+        print(getFromDB.getYearlyRevenueByWeeks(cursor))
     
             
 

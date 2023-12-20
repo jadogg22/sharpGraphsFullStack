@@ -1,9 +1,5 @@
-import WeeklyCount from "./weeklyCount"
-import MonthlyRevLine from "./monthlyRevLine"
-import MonthlyTotalMiles from "./MonthlyTotalMiles"
-import DestinationsPie from "./DestinationsPie"
-import YearlyRevenue from "./YearlyRevenue"
-import MonthlyRevByUser from "./MonthlyRevenueByUser"
+
+import YearlyRevenue from "./yearByYearLine"
 import RevByCode from "./RevByCode"
 
 import StackedBarContainer from "./StackedBarContainer"
@@ -35,6 +31,18 @@ const App = () => {
             >
               Stacked Miles
             </Link>  
+            <Link
+              className="text-green-400 hover:text-green-200" 
+              to="/RevByCode"
+            >
+              Revenue by Code
+            </Link>  
+            <Link
+              className="text-green-400 hover:text-green-200" 
+              to="/">
+
+                Revenue by Year
+              </Link>
           </nav>
         </div>
 
@@ -42,6 +50,8 @@ const App = () => {
           <Routes>
             <Route path="/revenue" element={<RevenueContainer />} />
             <Route path="/stackedbar" element={<StackedBarContainer />} />
+            <Route path="/RevByCode" element={<RevByCode />} />
+            <Route path="/" element={<YearlyRevenue />} />
           </Routes>
         </div>
       </div>

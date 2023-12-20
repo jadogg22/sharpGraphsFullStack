@@ -45,7 +45,7 @@ const StackedBarContainer = () => {
 
           console.log('Fetching data for:', start, 'to', end);
 
-          const result = await fetchData(`/getData/${start}/${end}`);
+          const result = await fetchData(`http://192.168.0.228:5000/getData/${start}/${end}`);
           console.log('API response:', result);
 
           setData(result);

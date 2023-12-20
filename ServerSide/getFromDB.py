@@ -223,36 +223,6 @@ def getDestinationCountsFromUtahByMonth(cursor, month):
 
     return result
 
-def getRevenueByDates(cursor, startDate, endDate):
-    # returns the total revenue for the month
-    query = query = '''
-        SELECT
-            Week,
-            ROUND(SUM(TotalRevenue), 2) as TotalRevenue
-        FROM Orders
-        WHERE Week BETWEEN ? AND ?
-        GROUP BY Week 
-    '''
-
-    cursor.execute(query, (startDate, endDate,))
-    dbData =  cursor.fetchall()
-
-    myData = []
-    for row in dbData:
-       
-        dict = {}
-        dict['Name'] = row[0]
-        dict['NameStr'] = weekToDateRange(row[0])
-        dict['Revenue'] = math.ceil(row[1]/1000)
-        dict['RevenueAct'] = row[1]
-        
-         
-        myData.append(dict)
-
-    return myData
-
-
-
 def getWeeklyRevenueByDay(week):
     # returns the total revenue for the week by delivery date
     query = '''
@@ -342,6 +312,67 @@ def getRevByCode(cursor, month="2023 M10"):
         dict['count'] = code[3]
         data.append(dict)
     return data
+
+def getRevenueByDates(cursor, startDate, endDate):
+    # returns the total revenue for the month
+    query = '''
+        SELECT
+            Week,
+            ROUND(SUM(TotalRevenue), 2) as TotalRevenue
+        FROM Orders
+        WHERE Week BETWEEN ? AND ?
+        GROUP BY Week 
+    '''
+
+    cursor.execute(query, (startDate, endDate,))
+    dbData =  cursor.fetchall()
+
+    myData = []
+    for row in dbData:
+       
+        dict = {}
+        dict['Name'] = row[0]
+        dict['NameStr'] = weekToDateRange(row[0])
+        dict['Revenue'] = math.ceil(row[1]/1000)
+        dict['RevenueAct'] = row[1]
+        
+         
+        myData.append(dict)
+
+    return myData
+
+def getYearlyRevenueByWeeks(cursor):
+    data = []
+
+    years = ["2021", "2022", "2023"]
+
+    for year in years:
+        yearlyData = getRevenueByDates(cursor, f"{year} W01", f"{year} W52")
+
+        for weekData in yearlyData:
+            week = weekData['Name'][-3:]  # Extract the last three characters from the 'Name' field
+
+            # Check if the week already exists in the result array
+            existing_week = next((item for item in data if item['Name'] == week), None)
+
+            if existing_week:
+                # If the week already exists, update the data for the specific year
+                existing_week[f"{year} Revenue"] = weekData['Revenue']
+                existing_week[f"{year} RevenueAct"] = weekData['RevenueAct']
+            else:
+                # If the week doesn't exist, add a new entry for the week
+                new_week_entry = {
+                    'Name': week,
+                    f"{year} Revenue": weekData['Revenue'],
+                    f"{year} RevenueAct": weekData['RevenueAct'],
+                }
+                data.append(new_week_entry)
+
+    return data
+
+
+
+
 
 
 

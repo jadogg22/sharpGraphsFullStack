@@ -1,26 +1,67 @@
 import React, { useState, useEffect } from 'react';
 import fetchData from './api';
-import { ResponsiveContainer, Pie, PieChart } from 'recharts';
+import { ResponsiveContainer, Pie, PieChart, Cell, Tooltip } from 'recharts';
 
-const data2 = [
-  { name: 'Group A', value: 400 },
-  { name: 'Group B', value: 300 },
-  { name: 'Group C', value: 300 },
-  { name: 'Group D', value: 200 },
-  { name: 'Group E', value: 278 },
-  { name: 'Group F', value: 189 },
+const colors = [
+  "#ff5722", "#4caf50", "#2196f3", "#e91e63", "#673ab7",
+  "#9c27b0", "#03a9f4", "#f44336", "#ff9800", "#8884d8", "#00bcd4",
 ];
+
+
+
+const maxDataKeysToShow = 10;
 
 const RevByCode = () => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
+const CustomTooltip = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload;
+    if (data.code === 'Other') {
+      // Display revenue for 'Other' category
+      const formattedNumber = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(data.revenue);
+      return (
+        <div style={{ background: 'white', padding: '5px', border: '1px solid #ccc' }}>
+          <p>{`Revenue: ${formattedNumber}`}</p>
+        </div>
+      );
+    } else {
+      // Display individual code and revenue
+      const formattedNumber = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(data.revenue);
+      return (
+        <div style={{ background: 'white', padding: '5px', border: '1px solid #ccc' }}>
+          <p>{`Code: ${data.code}`}</p>
+          <p>{`Revenue: ${formattedNumber}`}</p>
+        </div>
+      );
+    }
+  }
+
+  return null;
+};  
+
   useEffect(() => {
     const fetchDataAsync = async () => {
       try {
         const result = await fetchData('http://localhost:5000/getRevByCode');
-        setData(result);
+        // Sort data based on revenue in descending order
+        const sortedData = result.sort((a, b) => b.revenue - a.revenue);
+        // Filter out entries with zero revenue
+        const filteredData = sortedData.filter(entry => entry.revenue !== 0);
+        // Take only the top N entries
+        const truncatedData = filteredData.slice(0, maxDataKeysToShow);
+        // Group small entries into a single "Other" category
+        const groupedData = [...truncatedData];
+        if (filteredData.length > maxDataKeysToShow) {
+          const otherData = {
+            code: 'Other',
+            revenue: filteredData.slice(maxDataKeysToShow).reduce((sum, entry) => sum + entry.revenue, 0),
+          };
+          groupedData.push(otherData);
+        }
+        setData(groupedData);
       } catch (error) {
         setError(error);
       } finally {
@@ -38,14 +79,33 @@ const RevByCode = () => {
         return<p>Error: {error}</p>;
     }
 
-  return(
-    <ResponsiveContainer width="100%" height={400}>
-    <PieChart width={400} height={400}>
-    <Pie data={data} dataKey="count" cx="50%" cy="50%" outerRadius={95} fill="#8884d8" label/>
-
-    </PieChart>
-  </ResponsiveContainer>
-    )
+    return (
+   
+      <ResponsiveContainer width="100%" height={600}>
+      <div className="text-center pt-5">
+        <h1 className="text-3xl text-white mb-6">Weekly Revenue (in Thousands)</h1>
+      </div>
+      <PieChart >
+        <Pie
+          data={data}
+          dataKey="revenue"
+          nameKey="code"
+          cx="50%"
+          cy="50%"
+          outerRadius={225}
+          labelLine={false}
+          label={(entry) => entry.code} // Display code name in labels
+          isAnimationActive={false} // Disable interactivity
+        >
+          {data.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+          ))}
+        </Pie>
+        <Tooltip content={<CustomTooltip />}/>
+      </PieChart>
+    </ResponsiveContainer>
+  );
 };
+  
 
 export default RevByCode;

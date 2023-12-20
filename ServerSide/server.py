@@ -139,13 +139,13 @@ def get_Revenue(start_date, end_date):
 #     conn.close()
 #     return jsonify(data)
 
-# @app.route("/getYearlyRevenue")
-# def getYearlyRevenueByMonth():
-#     conn = sqlite3.connect("test.db")
-#     cursor = conn.cursor()
-#     data = getFromDB.getYearlyRevenueByMonth(cursor)
-#     conn.close()
-#     return jsonify(data)
+@app.route("/getYearlyRevenue")
+def getYearlyRevenueByWeeks():
+    conn = sqlite3.connect("test.db")
+    cursor = conn.cursor()
+    data = getFromDB.getYearlyRevenueByWeeks(cursor)
+    conn.close()
+    return jsonify(data)
 
 # @app.route("/getMonthlyRevByUser")
 # def getMonthlyRevByUser():
@@ -155,13 +155,13 @@ def get_Revenue(start_date, end_date):
 #     conn.close()
 #     return jsonify(data)
 
-# @app.route("/getRevByCode")
-# def getRevByCode():
-#     conn = sqlite3.connect("test.db")
-#     cursor = conn.cursor()
-#     data = getFromDB.getRevByCode(cursor)
-#     conn.close()
-#     return jsonify(data)
+@app.route("/getRevByCode")
+def getRevByCode():
+    conn = sqlite3.connect("test.db")
+    cursor = conn.cursor()
+    data = getFromDB.getRevByCode(cursor)
+    conn.close()
+    return jsonify(data)
     
 
 
