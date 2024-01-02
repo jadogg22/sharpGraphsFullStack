@@ -1,6 +1,6 @@
 import { ResponsiveContainer, BarChart, Bar, CartesianGrid, XAxis, Tooltip, Legend, YAxis ,LineChart, Line} from 'recharts'; import './App.css'
 import React, { useState, useEffect } from 'react';
-import fetchData from './api';
+import fetchData from './scripts/api';
 import Loading from './Loading';
 
 const CustomTooltip = ({ active, payload, label }) => {
@@ -36,7 +36,7 @@ const YearlyRevenue = () => {
         try {
           setIsLoading(true);
           // Assuming fetchData returns an array of objects with 'year' and 'weeks' properties
-          const result = await fetchData('http://192.168.0.228:5000/getYearlyRevenue');
+          const result = await fetchData('/getYearlyRevenue');
           console.log('API response:', result);
           setData(result);
         } catch (error) {

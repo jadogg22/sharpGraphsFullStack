@@ -1,6 +1,6 @@
 import { ResponsiveContainer, BarChart, Bar, CartesianGrid, XAxis, Tooltip, Legend, YAxis ,LineChart, Line} from 'recharts'; import './App.css'
 import React, { useState, useEffect } from 'react';
-import fetchData from './api';
+import fetchData from './scripts/api';
 
 const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
@@ -23,7 +23,7 @@ const MonthlyRevLine = ( { data}) => {
 
 
   return (
-    <ResponsiveContainer width="100%" height={400}>
+    <ResponsiveContainer width="95%" height={400}>
       <div className="text-center">
         <h1 className="text-3xl text-white mb-6">Monthly Revenue (in Thousands)</h1>
       </div>

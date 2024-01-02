@@ -1,6 +1,7 @@
 import { ResponsiveContainer, BarChart, Bar, CartesianGrid, XAxis, Tooltip, Legend, YAxis ,LineChart, Line} from 'recharts'; import './App.css'
 import React, { useState, useEffect } from 'react';
 import fetchData from './api';
+import Loading from './Loading';
 
 
 const MonthlyTotalMiles = () => {
@@ -27,7 +28,7 @@ const MonthlyTotalMiles = () => {
   }, []);
 
   if(isLoading){
-    return<p>Loading...</p>;
+    return<Loading />;
   }
   if(error){
     return<p>Error: {error}</p>;

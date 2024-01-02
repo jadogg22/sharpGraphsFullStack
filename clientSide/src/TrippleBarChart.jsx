@@ -2,14 +2,13 @@ import { ResponsiveContainer, BarChart, Bar, CartesianGrid, XAxis, Tooltip, Lege
 import { useState, useEffect } from 'react'
 
 
-
 function TrippleBarChart(){
 
     const [data, setData] = useState()
 
     useEffect(()=> {
     const fetchData = async ()  =>{
-        const res = await fetch("http://localhost:5000/data");
+        const res = await fetch("/data");
         const message = await res.json();
 
         const orderedDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];

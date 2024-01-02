@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import DateRangePicker from './DateRangePicker';
 import ComponentThatUsesData from './StackedBar';
-import fetchData from './api';
+import fetchData from './scripts/api';
 import MonthlyRevLine from './monthlyRevLine';
-import {convertTimestampToWeek} from './utilityFunctions'
+import Loading from './Loading';
+import {convertTimestampToWeek} from './scripts/utilityFunctions'
 
 const RevenueContainer = () => {
   const [selectedDateRange, setSelectedDateRange] = useState(null);
@@ -46,7 +47,7 @@ const RevenueContainer = () => {
 
           console.log('Fetching data for:', start, 'to', end);
 
-          const result = await fetchData(`http://192.168.0.228:5000/getRevenue/${start}/${end}`);
+          const result = await fetchData(`/getRevenue/${start}/${end}`);
           console.log('API response:', result);
 
           setData(result);
@@ -67,7 +68,7 @@ const RevenueContainer = () => {
   return (
     <div>
       <DateRangePicker onDateRangeChange={handleDateRangeChange} />
-      {isLoading && <p>Loading...</p>}
+      {isLoading && <Loading /> }
       {error && <p>Error: {error}</p>}
       {data && <MonthlyRevLine data={data} />}
     </div>

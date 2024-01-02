@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import fetchData from './api';
+import fetchData from './scripts/api';
+import Loading from './Loading';
 import { ResponsiveContainer, Pie, PieChart, Cell, Tooltip } from 'recharts';
 
 const colors = [
@@ -45,7 +46,7 @@ const CustomTooltip = ({ active, payload, label }) => {
   useEffect(() => {
     const fetchDataAsync = async () => {
       try {
-        const result = await fetchData('http://192.168.0.228:5000/getRevByCode');
+        const result = await fetchData('/getRevByCode');
         // Sort data based on revenue in descending order
         const sortedData = result.sort((a, b) => b.revenue - a.revenue);
         // Filter out entries with zero revenue
@@ -73,7 +74,7 @@ const CustomTooltip = ({ active, payload, label }) => {
     console.log(data);
   }, []);
     if(isLoading){
-        return<p>Loading...</p>;
+        return<Loading />;
     }
     if(error){
         return<p>Error: {error}</p>;

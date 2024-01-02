@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import DateRangePicker from './DateRangePicker';
 import ComponentThatUsesData from './StackedBar';
-import fetchData from './api';
+import fetchData from './scripts/api';
+import Loading from './Loading';
 
 const StackedBarContainer = () => {
   const [selectedDateRange, setSelectedDateRange] = useState(null);
@@ -45,7 +46,7 @@ const StackedBarContainer = () => {
 
           console.log('Fetching data for:', start, 'to', end);
 
-          const result = await fetchData(`http://192.168.0.228:5000/getData/${start}/${end}`);
+          const result = await fetchData(`/getData/${start}/${end}`);
           console.log('API response:', result);
 
           setData(result);
@@ -60,13 +61,11 @@ const StackedBarContainer = () => {
 
     fetchDataAsync();
   }, [selectedDateRange]);
-
-  console.log('Render - data:', data, 'error:', error, 'isLoading:', isLoading);
-
+ 
   return (
     <div>
       <DateRangePicker onDateRangeChange={handleDateRangeChange} />
-      {isLoading && <p>Loading...</p>}
+      {isLoading && <Loading />}
       {error && <p>Error: {error}</p>}
       {data && <ComponentThatUsesData data={data} />}
     </div>

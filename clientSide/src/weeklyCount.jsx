@@ -6,7 +6,7 @@ function WeeklyCount(){
 
     useEffect(()=> {
     const fetchData = async ()  =>{
-        const res = await fetch("http://localhost:5000/WeekDayCount");
+        const res = await fetch("/WeekDayCount");
         const message = await res.json();
         
         setData(message)

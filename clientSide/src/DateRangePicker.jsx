@@ -22,7 +22,7 @@ const DateRangePicker = ({ onDateRangeChange }) => {
   }, []);
 
   return (
-    <div className="flex items-center space-x-4">
+    <div className="flex items-center space-x-4 mx-16 p-4">
     <div className="relative">
       <label className="block text-sm font-medium text-white">Start Date</label>
       <DatePicker
